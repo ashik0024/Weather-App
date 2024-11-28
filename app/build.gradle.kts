@@ -45,8 +45,12 @@ android {
     buildFeatures{
         viewBinding=true
         dataBinding=true
+        compose=true
     }
-}
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.kotlin.compose.version.get()
+
+    }
 
 dependencies {
 
@@ -77,7 +81,7 @@ dependencies {
         ksp(room.kapt)
         implementation(paging)
         implementation(bundles.room)
-        implementation(platform(compose.bom))
+
         implementation(bundles.compose)
         implementation(work.manager.ktx)
         implementation(bundles.lifecycle)
@@ -94,4 +98,5 @@ dependencies {
 
 
     }
+}
 }

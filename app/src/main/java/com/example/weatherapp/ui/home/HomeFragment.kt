@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -23,6 +24,7 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding
     private val weatherViewModel:WeatherViewModel by viewModels()
+    private val forecastViewModel:ForecastViewModel by viewModels()
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -37,8 +39,10 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         observeLocation()
-        observeData()
+        observeWeatherData()
+        observeForecastData()
     }
 
     private fun observeLocation() {
@@ -47,12 +51,13 @@ class HomeFragment : Fragment() {
             Log.d("LocationRepository", "Received location: Lat=$latitude, Lon=$longitude")
 
             weatherViewModel.fetchWeatherData(latitude,longitude,"64ff98f1b20306789b31e70080328a26")
+            forecastViewModel.fetchForecastData(latitude,longitude,"64ff98f1b20306789b31e70080328a26")
 
         }
     }
 
 
-    private fun observeData() {
+    private fun observeWeatherData() {
 
         weatherViewModel.weatherData.observe(viewLifecycleOwner, Observer { result ->
             when (result) {
@@ -71,6 +76,23 @@ class HomeFragment : Fragment() {
             }
         })
     }
+    private fun observeForecastData() {
+        forecastViewModel.forecastData.observe(viewLifecycleOwner, Observer { result ->
+            when (result) {
+                is Result.Success -> {
+                    Log.d("LocationRepository", ": "+result.data)
+                }
+                is Result.Error -> {
+                    val error = result.exception
+                    Toast.makeText(requireContext(), "Error: ${error.message}", Toast.LENGTH_LONG).show()
+                }
+                is Result.Loading -> {
+                    Log.d("LocationRepository", ": loading")
+                }
 
+                else -> {}
+            }
+        })
+    }
 
 }
