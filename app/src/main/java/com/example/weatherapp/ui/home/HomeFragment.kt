@@ -45,7 +45,6 @@ class HomeFragment : Fragment() {
         }
 
         observeLocation()
-        observeWeatherData()
         observeForecastData()
     }
 
@@ -60,26 +59,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-
-    private fun observeWeatherData() {
-
-        weatherViewModel.weatherData.observe(viewLifecycleOwner, Observer { result ->
-            when (result) {
-                is Result.Success -> {
-                    Log.d("LocationRepository", ": "+result.data)
-                }
-                is Result.Error -> {
-                    val error = result.exception
-                    Toast.makeText(requireContext(), "Error: ${error.message}", Toast.LENGTH_LONG).show()
-                }
-                is Result.Loading -> {
-                    Log.d("LocationRepository", ": loading")
-                }
-
-                else -> {}
-            }
-        })
-    }
     private fun observeForecastData() {
         forecastViewModel.forecastData.observe(viewLifecycleOwner, Observer { result ->
             when (result) {
