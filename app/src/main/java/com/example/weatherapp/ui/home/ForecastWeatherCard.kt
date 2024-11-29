@@ -3,53 +3,68 @@ package com.example.weatherapp.ui.home
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.weatherapp.network.responseClass.WeatherResponse
+import coil.compose.rememberAsyncImagePainter
+import com.example.weatherapp.network.responseClass.ForecastResponse
+import com.example.weatherapp.utils.Utils
+
 
 @Composable
-fun ForecastWeatherCard() {
+fun ForecastWeatherCard(forecast: ForecastResponse, timePeriodStyle: TimePeriodStyle) {
+    val utils = Utils()
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
-        backgroundColor = Color(0xFFE0F7FA)
+        backgroundColor = timePeriodStyle.backgroundColor
     ) {
-        Row(
+        LazyRow(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+
+            horizontalArrangement = Arrangement.spacedBy(16.dp) // Space between items
         ) {
-            repeat(6) { index ->
+            items(forecast.list?.size?: 0) { index ->
+                val forecastItem = forecast.list?.get(index)
+                var temperature=utils.kelvinToCelsius(forecastItem?.main?.temp?:0.0)
+
+                val imageUrl = "https://openweathermap.org/img/wn/${forecastItem?.weather?.get(0)?.icon}@2x.png"
+                val painter = rememberAsyncImagePainter(imageUrl)
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = if (index == 0) "Now" else "${2 * index} AM", fontSize = 14.sp)
+                    Text(text =utils.convertUnixToTimeAmPm(forecastItem?.dt?.toLong()?:0),
+                        fontSize = 14.sp,
+                        color = timePeriodStyle.textColor)
                     Spacer(modifier = Modifier.height(4.dp))
                     Image(
-                        imageVector = Icons.Default.Favorite,
-                        contentDescription = "Cloudy Icon",
-                        modifier = Modifier.size(24.dp)
+                        painter = painter,
+                        contentDescription = "Weather icon",
+                        modifier = Modifier.size(40.dp),
+                        alignment = Alignment.Center,
                     )
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text(text = "${20 + index}°", fontSize = 14.sp)
+                    Text(text = "$temperature\u00B0C",
+                        fontSize = 14.sp,
+                        color = timePeriodStyle.textColor)
                 }
             }
         }
     }
 }
+
+

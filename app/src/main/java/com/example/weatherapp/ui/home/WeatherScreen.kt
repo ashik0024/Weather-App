@@ -1,5 +1,6 @@
 package com.example.weatherapp.ui.home
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,22 +20,24 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.weatherapp.R
 import com.example.weatherapp.network.Result
+import com.example.weatherapp.network.responseClass.ForecastResponse
 import com.example.weatherapp.network.responseClass.WeatherResponse
 
 @Composable
 fun WeatherScreen(
+    timePeriodStyle: TimePeriodStyle,
     weatherViewModel: WeatherViewModel = hiltViewModel()
 ) {
     val weatherState by weatherViewModel.weatherData.collectAsState()
+    val forecastState by weatherViewModel.forecastData.collectAsState()
     Box(
         modifier = Modifier
             .fillMaxSize()
 
     ) {
         Image(
-            painter = painterResource(id = R.drawable.img_sunny),
+            painter = painterResource(timePeriodStyle.drawable),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
@@ -50,6 +53,7 @@ fun WeatherScreen(
                 }
                 is Result.Success -> {
                     val weather = (weatherState as Result.Success<WeatherResponse>).data
+                    Log.d("getWeatherGroup", weather.weather?.get(0)?.id.toString())
 
                     TopSection(weather)
 
@@ -62,8 +66,21 @@ fun WeatherScreen(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
 
-                        CurrentWeatherCard(weather)
+                        CurrentWeatherCard(weather,timePeriodStyle)
 
+                        when (forecastState) {
+                            is Result.Loading -> {
+                                Text("Loading Forecast...", style = MaterialTheme.typography.h6)
+                            }
+                            is Result.Success -> {
+                                val forecast = (forecastState as Result.Success<ForecastResponse>).data
+                                ForecastWeatherCard(forecast,timePeriodStyle)
+                            }
+                            is Result.Error -> {
+                                val errorMessage = (forecastState as Result.Error).exception.message
+                                Text("Error: $errorMessage", style = MaterialTheme.typography.h6)
+                            }
+                        }
                     }
 
                 }
@@ -78,3 +95,4 @@ fun WeatherScreen(
     }
 
 }
+
