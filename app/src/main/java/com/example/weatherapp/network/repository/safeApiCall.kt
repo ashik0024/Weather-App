@@ -1,5 +1,6 @@
 package com.example.weatherapp.network.repository
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -22,6 +23,7 @@ suspend fun <T> safeApiCall(apiCall: suspend () -> T): Result<T> {
             Result.Error(HttpException(e.response() ?: Response.error<Any>(500, "".toResponseBody())))
         } catch (e: Exception) {
             // Handle any other unexpected errors
+            Log.e("errors", "Unknown error occurred: ${e}")
             Result.Error(Exception("An unknown error occurred", e))
         }
     }

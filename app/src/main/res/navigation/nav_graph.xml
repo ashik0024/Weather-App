@@ -19,9 +19,13 @@
         android:id="@+id/searchFrag"
         android:name="com.example.weatherapp.ui.search.SearchFragment"
         android:label="Search Fragment"
-        tools:layout="@layout/fragment_search" >
+        tools:layout="@layout/fragment_search">
         <action
             android:id="@+id/search_to_home"
-            app:destination="@id/homeFRag" />
+            app:destination="@id/homeFRag">
+            <argument
+                android:name="zilaInfo"
+                app:argType="com.example.weatherapp.ui.search.ZilaInfo" />
+        </action>
     </fragment>
 </navigation>

@@ -16,6 +16,7 @@ import com.example.weatherapp.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.fragment.findNavController
+import com.example.weatherapp.ui.search.ZilaInfo
 import com.example.weatherapp.utils.Utils
 
 @AndroidEntryPoint
@@ -25,6 +26,8 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding
     private val weatherViewModel:WeatherViewModel by viewModels()
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
+    private var lat:Double?=null
+    private var long:Double?=null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,21 +41,30 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val backgroundDrawable = Utils.getTimePeriodStyle()
+
+        arguments?.getParcelable<ZilaInfo>("zilaInfo")?.let { zilaInfo ->
+            lat=zilaInfo.coord?.lat?:0.0
+            long=zilaInfo.coord?.lon?:0.0
+        }
+
         binding?.weatherHomePageCompose?.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         binding?.weatherHomePageCompose?.setContent {
             WeatherScreen(backgroundDrawable,findNavController())
         }
-
         observeLocation()
     }
 
     private fun observeLocation() {
         mainActivityViewModel.locationData.observe(viewLifecycleOwner) { location ->
-            val (latitude, longitude) = location
-            Log.d("LocationRepository", "Received location: Lat=$latitude, Lon=$longitude")
+            if (lat==null|| long==null)
+            {
+                lat=location.first
+                long=location.second
 
-            weatherViewModel.fetchWeatherData(latitude,longitude,"52b6bc7eef01ef8476e925e0cc91bc58")
-            weatherViewModel.fetchForecastData(latitude,longitude,"52b6bc7eef01ef8476e925e0cc91bc58")
+            }
+            Log.d("LocationRepository", "Received location: Lat=$lat, Lon=$long")
+            weatherViewModel.fetchWeatherData(lat?:0.0,long?:0.0,"52b6bc7eef01ef8476e925e0cc91bc58")
+            weatherViewModel.fetchForecastData(lat?:0.0,long?:0.0,"52b6bc7eef01ef8476e925e0cc91bc58")
 
         }
     }

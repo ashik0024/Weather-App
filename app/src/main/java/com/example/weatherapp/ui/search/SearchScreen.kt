@@ -3,6 +3,7 @@ package com.example.weatherapp.ui.search
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -31,7 +32,10 @@ import com.example.weatherapp.ui.home.TimePeriodStyle
 
 
 @Composable
-fun SearchScreen(timePeriodStyle: TimePeriodStyle, zilaList: List<ZilaInfo>) {
+fun SearchScreen(
+    timePeriodStyle: TimePeriodStyle, zilaList: List<ZilaInfo>,
+    onItemClicked: (ZilaInfo) -> Unit
+) {
 
     var query by remember { mutableStateOf("") }
     var isFocused by remember { mutableStateOf(false) }
@@ -87,16 +91,26 @@ fun SearchScreen(timePeriodStyle: TimePeriodStyle, zilaList: List<ZilaInfo>) {
                 .background(timePeriodStyle.backgroundColor)) {
                 if (query.isNotEmpty()) {
                     items(filteredItems) { item ->
-                        Text(
-                            text = item.name.toString(),
+                        Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(8.dp)
-                                .background(timePeriodStyle.backgroundColor, RoundedCornerShape(4.dp))
-                                .padding(16.dp),
-                            color = timePeriodStyle.textColor,
-                            style = MaterialTheme.typography.body1
-                        )
+                                .padding(horizontal = 8.dp, vertical = 4.dp)
+                                .background(
+                                    color = timePeriodStyle.backgroundColor,
+                                    shape = RoundedCornerShape(12.dp)
+                                )
+                                .clickable {
+                                    onItemClicked(item)
+                                }
+                        ) {
+                            Text(
+                                text = item.name.toString(),
+                                modifier = Modifier
+                                    .padding(16.dp),
+                                color = timePeriodStyle.textColor,
+                                style = MaterialTheme.typography.body1
+                            )
+                        }
                     }
                 }
             }

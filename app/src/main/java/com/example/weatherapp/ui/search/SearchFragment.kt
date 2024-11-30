@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentSearchBinding
 import com.example.weatherapp.utils.Utils
@@ -38,7 +40,13 @@ class SearchFragment : Fragment() {
         Log.d("itemList", "Parsed List: $zilaList")
         binding?.searchPageCompose?.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         binding?.searchPageCompose?.setContent {
-            SearchScreen(backgroundDrawable,zilaList)
+            SearchScreen(backgroundDrawable,zilaList,
+                onItemClicked = { zilaInfo ->
+                    findNavController().navigate(
+                        R.id.search_to_home,
+                        bundleOf("zilaInfo" to zilaInfo)
+                    )
+                })
         }
     }
 }

@@ -61,8 +61,6 @@ data class ForecastResponse(
         var dtTxt: String? = "",
         @SerialName("main")
         var main: Main? = Main(),
-        @SerialName("pop")
-        var pop: Int? = 0,
         @SerialName("sys")
         var sys: Sys? = Sys(),
         @SerialName("visibility")
