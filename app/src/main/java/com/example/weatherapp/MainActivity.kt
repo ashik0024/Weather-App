@@ -5,15 +5,16 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.weatherapp.databinding.ActivityMainBinding
+import com.example.weatherapp.ui.search.ZilaInfo
 import com.example.weatherapp.utils.loaction.LocationViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import com.example.weatherapp.utils.Utils
+import com.google.gson.Gson
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -23,7 +24,6 @@ class MainActivity : AppCompatActivity() {
     private val activityViewModel: MainActivityViewModel by viewModels()
     private var latitude: Double? = null
     private var longitude: Double? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity() {
 
         observeLocation()
         checkPermissionsAndFetchLocation()
-
     }
     private fun checkPermissionsAndFetchLocation() {
         if (ActivityCompat.checkSelfPermission(

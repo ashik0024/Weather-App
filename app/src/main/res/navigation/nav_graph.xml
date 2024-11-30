@@ -10,7 +10,18 @@
         android:name="com.example.weatherapp.ui.home.HomeFragment"
         android:label="Home Fragment"
         tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/home_to_search"
+            app:destination="@id/searchFrag" />
+    </fragment>
 
-
+    <fragment
+        android:id="@+id/searchFrag"
+        android:name="com.example.weatherapp.ui.search.SearchFragment"
+        android:label="Search Fragment"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/search_to_home"
+            app:destination="@id/homeFRag" />
     </fragment>
 </navigation>

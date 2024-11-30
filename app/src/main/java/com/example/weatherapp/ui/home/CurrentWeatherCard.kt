@@ -27,8 +27,8 @@ import com.example.weatherapp.utils.Utils
 
 @Composable
 fun CurrentWeatherCard(weather: WeatherResponse, timePeriodStyle: TimePeriodStyle) {
-    val utils = Utils()
-    var temperature=utils.kelvinToCelsius(weather.main?.temp?:0.0)
+
+    var temperature=Utils.kelvinToCelsius(weather.main?.temp?:0.0)
     var humidity=String.format("%.1f%%", weather.main?.humidity?.toFloat())
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -94,7 +94,7 @@ fun CurrentWeatherCard(weather: WeatherResponse, timePeriodStyle: TimePeriodStyl
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = utils.convertUnixToDate(weather.dt?.toLong()?:0),
+                text = Utils.convertUnixToDate(weather.dt?.toLong()?:0),
                 fontSize = 14.sp,
                 color = timePeriodStyle.textColor
             )
@@ -107,13 +107,13 @@ fun CurrentWeatherCard(weather: WeatherResponse, timePeriodStyle: TimePeriodStyl
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Sunrise: ${utils.convertUnixToTime(weather.sys?.sunrise?.toLong() ?: 0)}",
+                    text = "Sunrise: ${Utils.convertUnixToTime(weather.sys?.sunrise?.toLong() ?: 0)}",
                     fontSize = 14.sp,
                     color = timePeriodStyle.textColor
                 )
 
                 Text(
-                    text = "Sunset: ${utils.convertUnixToTime(weather.sys?.sunset?.toLong() ?: 0)}",
+                    text = "Sunset: ${Utils.convertUnixToTime(weather.sys?.sunset?.toLong() ?: 0)}",
                     fontSize = 14.sp,
                     color = timePeriodStyle.textColor
                 )

@@ -1,6 +1,7 @@
 package com.example.weatherapp.ui.home
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -21,7 +22,7 @@ import com.example.weatherapp.R
 import com.example.weatherapp.network.responseClass.WeatherResponse
 
 @Composable
-fun TopSection(weather: WeatherResponse) {
+fun TopSection(weather: WeatherResponse,onSearchClicked: () -> Unit) {
 
     Box(
         modifier = Modifier
@@ -65,6 +66,7 @@ fun TopSection(weather: WeatherResponse) {
                 modifier = Modifier
                     .size(24.dp)
                     .align(Alignment.CenterVertically)
+                    .clickable { onSearchClicked() }
             )
         }
 

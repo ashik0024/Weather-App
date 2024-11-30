@@ -25,7 +25,6 @@ import com.example.weatherapp.utils.Utils
 
 @Composable
 fun ForecastWeatherCard(forecast: ForecastResponse, timePeriodStyle: TimePeriodStyle) {
-    val utils = Utils()
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
@@ -40,14 +39,14 @@ fun ForecastWeatherCard(forecast: ForecastResponse, timePeriodStyle: TimePeriodS
         ) {
             items(forecast.list?.size?: 0) { index ->
                 val forecastItem = forecast.list?.get(index)
-                var temperature=utils.kelvinToCelsius(forecastItem?.main?.temp?:0.0)
+                var temperature=Utils.kelvinToCelsius(forecastItem?.main?.temp?:0.0)
 
                 val imageUrl = "https://openweathermap.org/img/wn/${forecastItem?.weather?.get(0)?.icon}@2x.png"
                 val painter = rememberAsyncImagePainter(imageUrl)
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text =utils.convertUnixToTimeAmPm(forecastItem?.dt?.toLong()?:0),
+                    Text(text =Utils.convertUnixToTimeAmPm(forecastItem?.dt?.toLong()?:0),
                         fontSize = 14.sp,
                         color = timePeriodStyle.textColor)
                     Spacer(modifier = Modifier.height(4.dp))

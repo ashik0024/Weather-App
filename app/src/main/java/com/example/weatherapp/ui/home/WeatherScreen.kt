@@ -20,17 +20,20 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.example.weatherapp.R
 import com.example.weatherapp.network.Result
 import com.example.weatherapp.network.responseClass.ForecastResponse
 import com.example.weatherapp.network.responseClass.WeatherResponse
-
 @Composable
 fun WeatherScreen(
     timePeriodStyle: TimePeriodStyle,
+    findNavController: NavController,
     weatherViewModel: WeatherViewModel = hiltViewModel()
-) {
+    ) {
     val weatherState by weatherViewModel.weatherData.collectAsState()
     val forecastState by weatherViewModel.forecastData.collectAsState()
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -55,7 +58,10 @@ fun WeatherScreen(
                     val weather = (weatherState as Result.Success<WeatherResponse>).data
                     Log.d("getWeatherGroup", weather.weather?.get(0)?.id.toString())
 
-                    TopSection(weather)
+                    TopSection(weather = weather,
+                        onSearchClicked = {
+                            findNavController.navigate(R.id.home_to_search)
+                        })
 
                     Column(
                         modifier = Modifier

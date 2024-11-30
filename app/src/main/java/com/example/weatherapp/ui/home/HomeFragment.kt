@@ -15,6 +15,8 @@ import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.fragment.findNavController
+import com.example.weatherapp.utils.Utils
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -35,10 +37,10 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val backgroundDrawable = getTimePeriodStyle()
+        val backgroundDrawable = Utils.getTimePeriodStyle()
         binding?.weatherHomePageCompose?.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         binding?.weatherHomePageCompose?.setContent {
-            WeatherScreen(backgroundDrawable)
+            WeatherScreen(backgroundDrawable,findNavController())
         }
 
         observeLocation()
@@ -49,52 +51,11 @@ class HomeFragment : Fragment() {
             val (latitude, longitude) = location
             Log.d("LocationRepository", "Received location: Lat=$latitude, Lon=$longitude")
 
-            weatherViewModel.fetchWeatherData(latitude,longitude,"64ff98f1b20306789b31e70080328a26")
-            weatherViewModel.fetchForecastData(latitude,longitude,"64ff98f1b20306789b31e70080328a26")
+            weatherViewModel.fetchWeatherData(latitude,longitude,"52b6bc7eef01ef8476e925e0cc91bc58")
+            weatherViewModel.fetchForecastData(latitude,longitude,"52b6bc7eef01ef8476e925e0cc91bc58")
 
         }
     }
 
-    fun getTimePeriodStyle(): TimePeriodStyle {
-        val currentTime = java.util.Calendar.getInstance().get(java.util.Calendar.HOUR_OF_DAY)
-
-        return when (currentTime) {
-            in 0..3 -> TimePeriodStyle(
-                drawable = R.drawable.midnight_img,
-                backgroundColor = Color(0xFF9090AC),
-                textColor = Color(0xFF484A82)
-            )
-            in 4..6 -> TimePeriodStyle(
-                drawable = R.drawable.early_morning,
-                backgroundColor = Color(0xFF5A8BAB),
-                textColor = Color(0xFFAED5E4)
-            )
-            in 7..11 -> TimePeriodStyle(
-                drawable = R.drawable.morning_img,
-                backgroundColor = Color(0xFF71A78F),
-                textColor = Color(0xFF71A78F)
-            )
-            in 12..15 -> TimePeriodStyle(
-                drawable = R.drawable.afternoon_img,
-                backgroundColor = Color(0xFFEFAA82),
-                textColor = Color(0xFFEFAA82)
-            )
-            in 16..19 -> TimePeriodStyle(
-                drawable = R.drawable.twilight_img,
-                backgroundColor = Color(0xFFAC736A),
-                textColor = Color(0xFFF6C8A4)
-            )
-            in 20..23 -> TimePeriodStyle(
-                drawable = R.drawable.night_img,
-                backgroundColor = Color(0xFF40666A),
-                textColor = Color(0xFFC9E8E0)
-            )
-            else -> TimePeriodStyle(
-                drawable = R.drawable.morning_img,
-                backgroundColor = Color(0xFF71A78F),
-                textColor = Color(0xFF71A78F)
-            )
-        }
-    }
 
 }
