@@ -55,7 +55,7 @@ object Utils {
             )
             in 7..11 -> TimePeriodStyle(
                 drawable = R.drawable.morning_img,
-                backgroundColor = Color(0xFF71A78F),
+                backgroundColor = Color(0xFF9FDCA8),
                 textColor = Color(0xFF71A78F)
             )
             in 12..15 -> TimePeriodStyle(
@@ -75,7 +75,7 @@ object Utils {
             )
             else -> TimePeriodStyle(
                 drawable = R.drawable.morning_img,
-                backgroundColor = Color(0xFF71A78F),
+                backgroundColor = Color(0xFF9FDCA8),
                 textColor = Color(0xFF71A78F)
             )
         }

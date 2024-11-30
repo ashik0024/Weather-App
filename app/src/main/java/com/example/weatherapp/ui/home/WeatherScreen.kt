@@ -1,6 +1,7 @@
 package com.example.weatherapp.ui.home
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -16,6 +19,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -25,6 +29,8 @@ import com.example.weatherapp.R
 import com.example.weatherapp.network.Result
 import com.example.weatherapp.network.responseClass.ForecastResponse
 import com.example.weatherapp.network.responseClass.WeatherResponse
+import com.example.weatherapp.network.retrofit.AppContext
+
 @Composable
 fun WeatherScreen(
     timePeriodStyle: TimePeriodStyle,
@@ -52,7 +58,8 @@ fun WeatherScreen(
         ) {
             when (weatherState) {
                 is Result.Loading -> {
-                    Text("Loading...", style = MaterialTheme.typography.h6)
+//
+                    LoadingIndicator(true)
                 }
                 is Result.Success -> {
                     val weather = (weatherState as Result.Success<WeatherResponse>).data
@@ -76,15 +83,16 @@ fun WeatherScreen(
 
                         when (forecastState) {
                             is Result.Loading -> {
-                                Text("Loading Forecast...", style = MaterialTheme.typography.h6)
                             }
                             is Result.Success -> {
                                 val forecast = (forecastState as Result.Success<ForecastResponse>).data
                                 ForecastWeatherCard(forecast,timePeriodStyle)
+                                LoadingIndicator(false)
                             }
                             is Result.Error -> {
                                 val errorMessage = (forecastState as Result.Error).exception.message
-                                Text("Error: $errorMessage", style = MaterialTheme.typography.h6)
+                                LoadingIndicator(false)
+                                Toast.makeText(AppContext.getContext(),"Error: $errorMessage",Toast.LENGTH_LONG).show()
                             }
                         }
                     }
@@ -92,7 +100,9 @@ fun WeatherScreen(
                 }
                 is Result.Error -> {
                     val errorMessage = (weatherState as Result.Error).exception.message
-                    Text("Error: $errorMessage", style = MaterialTheme.typography.h6)
+                    LoadingIndicator(false)
+                    Toast.makeText(AppContext.getContext(),"Error: $errorMessage",Toast.LENGTH_LONG).show()
+
                 }
             }
 
@@ -100,5 +110,23 @@ fun WeatherScreen(
         }
     }
 
+}
+
+@Composable
+fun LoadingIndicator(isLoading: Boolean) {
+    if (isLoading) {
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .wrapContentSize(Alignment.Center)
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center),
+                color = Color.White,
+                strokeWidth = 6.dp
+            )
+        }
+    }
 }
 
