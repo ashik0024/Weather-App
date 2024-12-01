@@ -38,14 +38,12 @@ fun WeatherScreen(
     ) {
     val weatherState by weatherViewModel.weatherData.collectAsState()
     val forecastState by weatherViewModel.forecastData.collectAsState()
-    val timePeriodStyle= TimePeriodStyle()
     Box(
         modifier = Modifier
             .fillMaxSize()
-
     ) {
         Image(
-            painter = painterResource(timePeriodStyle.drawable),
+            painter = painterResource(R.drawable.background),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
@@ -56,20 +54,19 @@ fun WeatherScreen(
                 .fillMaxSize()
         ) {
             if (permissionDenied) {
-
                 Toast.makeText(LocalContext.current, "Location permission denied. Please enable it to fetch weather data.", Toast.LENGTH_SHORT).show()
 
             }else{
+
+                /**
+                 * Try Loading data from weather api
+                 */
                 when (weatherState) {
                     is Result.Loading -> {
-//
                         LoadingIndicator(true)
-                        Log.d("WeatherScreen", "1: ")
                     }
                     is Result.Success -> {
                         val weather = (weatherState as Result.Success<WeatherResponse>).data
-                        Log.d("getWeatherGroup", "$weather")
-                        Log.d("WeatherScreen", "2: ")
                         TopSection(weather,
                             onSearchClicked = {
                                 findNavController.navigate(R.id.home_to_search)
@@ -83,23 +80,20 @@ fun WeatherScreen(
                             verticalArrangement = Arrangement.SpaceEvenly,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-
-                            CurrentWeatherCard(weather,timePeriodStyle)
-
+                            CurrentWeatherCard(weather)
+                            /**
+                             * Try Loading data from Forecast api
+                             */
                             when (forecastState) {
                                 is Result.Loading -> {
-                                    Log.d("WeatherScreen", "3: ")
                                 }
                                 is Result.Success -> {
-                                    Log.d("WeatherScreen", "4: ")
                                     val forecast = (forecastState as Result.Success<ForecastResponse>).data
                                     WeatherDetails(weather)
                                     ForecastWeatherCard(forecast)
-
                                     LoadingIndicator(false)
                                 }
                                 is Result.Error -> {
-                                    Log.d("WeatherScreen", "5: ")
                                     val errorMessage = (forecastState as Result.Error).exception.message
                                     LoadingIndicator(false)
                                     Toast.makeText(AppContext.getContext(),"Error: $errorMessage",Toast.LENGTH_LONG).show()
@@ -109,7 +103,6 @@ fun WeatherScreen(
 
                     }
                     is Result.Error -> {
-                        Log.d("WeatherScreen", "6: ")
                         val errorMessage = (weatherState as Result.Error).exception.message
                         LoadingIndicator(false)
                         Toast.makeText(AppContext.getContext(),"Error: $errorMessage",Toast.LENGTH_LONG).show()
@@ -128,7 +121,6 @@ fun WeatherScreen(
 @Composable
 fun LoadingIndicator(isLoading: Boolean) {
     if (isLoading) {
-
         Box(
             modifier = Modifier
                 .fillMaxSize()

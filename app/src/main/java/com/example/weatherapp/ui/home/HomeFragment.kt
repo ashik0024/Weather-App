@@ -56,6 +56,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun observeLocation() {
+        /**
+         * when user arrives in home fragment from app lunch then take user current location observing data from
+         * viewmodel. if user arrives from search page then take selected zilla's location data.
+         */
         mainActivityViewModel.locationData.observe(viewLifecycleOwner) { location ->
             if (lat==null|| long==null)
             {
@@ -63,8 +67,8 @@ class HomeFragment : Fragment() {
                 long=location.second
 
             }
-            weatherViewModel.fetchWeatherData(lat?:0.0,long?:0.0,"52b6bc7eef01ef8476e925e0cc91bc58")
-            weatherViewModel.fetchForecastData(lat?:0.0,long?:0.0,"52b6bc7eef01ef8476e925e0cc91bc58")
+            weatherViewModel.fetchWeatherData(lat?:0.0,long?:0.0,getString(R.string.api_key))
+            weatherViewModel.fetchForecastData(lat?:0.0,long?:0.0,getString(R.string.api_key))
 
         }
     }

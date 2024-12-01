@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -30,7 +31,7 @@ import com.example.weatherapp.network.responseClass.WeatherResponse
 import com.example.weatherapp.utils.Utils
 
 @Composable
-fun CurrentWeatherCard(weather: WeatherResponse, timePeriodStyle: TimePeriodStyle) {
+fun CurrentWeatherCard(weather: WeatherResponse) {
     val sf_pro = FontFamily(
         Font(R.font.sf_pro_regular, FontWeight.Normal),
         Font(R.font.sf_pro_regular, FontWeight.Bold)
@@ -43,7 +44,7 @@ fun CurrentWeatherCard(weather: WeatherResponse, timePeriodStyle: TimePeriodStyl
 
     ) {
         Spacer(modifier = Modifier.height(24.dp))
-        Text(text = "Today", fontSize = 20.sp, color = timePeriodStyle.textColor, fontFamily = sf_pro)
+        Text(text = LocalContext.current.getString(R.string.today), fontSize = 20.sp, color = Color.White, fontFamily = sf_pro)
         Spacer(modifier = Modifier.height(8.dp))
 
         Row (
@@ -60,13 +61,13 @@ fun CurrentWeatherCard(weather: WeatherResponse, timePeriodStyle: TimePeriodStyl
                 error = painterResource(id = R.drawable.errorimg),
                 fallback = painterResource(id = R.drawable.placeholder),
                 modifier = Modifier.size(60.dp),
-                colorFilter = ColorFilter.tint(timePeriodStyle.textColor)
+                colorFilter = ColorFilter.tint(Color.White)
             )
             Text(
                 text = "$temperature\u00B0C",
                 fontSize = 48.sp,
 
-                color = timePeriodStyle.textColor ,
+                color = Color.White ,
                 fontFamily = sf_pro
             )
         }
@@ -75,14 +76,14 @@ fun CurrentWeatherCard(weather: WeatherResponse, timePeriodStyle: TimePeriodStyl
         Text(
             text = weather.weather?.joinToString(", ") { it?.main ?: "Unknown" }.toString(),
             fontSize = 20.sp,
-            color = timePeriodStyle.textColor,
+            color = Color.White,
             fontFamily = sf_pro
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = Utils.convertUnixToDate(weather.dt?.toLong()?:0),
             fontSize = 14.sp,
-            color = timePeriodStyle.textColor,
+            color = Color.White,
             fontFamily = sf_pro
         )
 

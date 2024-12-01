@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -39,7 +40,6 @@ Column(
     SunRiseSunSet(weather)
     HumidityPressure(weather)
 }
-
 }
 @Composable
 fun SunRiseSunSet(weather: WeatherResponse) {
@@ -47,21 +47,20 @@ fun SunRiseSunSet(weather: WeatherResponse) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
-        ,
+            .padding(vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
 
         WeatherDetailsCard(
             imageResId = R.drawable.sun_rise,
-            name = "Sun Rise",
+            name = LocalContext.current.getString(R.string.sun_rise),
             description = Utils.convertUnixToTime(weather.sys?.sunrise?.toLong()?:0)
         )
 
         WeatherDetailsCard(
             imageResId = R.drawable.sun_set,
-            name = "Sun Set",
+            name =  LocalContext.current.getString(R.string.sun_set),
             description = Utils.convertUnixToTime(weather.sys?.sunset?.toLong()?:0)
         )
     }
@@ -78,14 +77,14 @@ fun HumidityPressure(weather: WeatherResponse) {
 
         WeatherDetailsCard(
             imageResId = R.drawable.pressure,
-            name = "Pressure",
+            name = LocalContext.current.getString(R.string.pressure),
             description = String.format("%.1f%%", weather.main?.humidity?.toFloat())
         )
 
 
         WeatherDetailsCard(
             imageResId = R.drawable.humidity,
-            name = "Humidity",
+            name = LocalContext.current.getString(R.string.humidity),
             description = "${weather.main?.pressure} hPa"
         )
     }

@@ -25,14 +25,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.weatherapp.R
-import com.example.weatherapp.ui.home.TimePeriodStyle
 
 
 @Composable
@@ -44,9 +45,13 @@ fun SearchScreen(
         Font(R.font.sf_pro_regular, FontWeight.Normal),
         Font(R.font.sf_pro_regular, FontWeight.Bold)
     )
-    val timePeriodStyle= TimePeriodStyle()
-    var query by remember { mutableStateOf("") }
+
     var isFocused by remember { mutableStateOf(false) }
+    var query by remember { mutableStateOf("") }
+
+    /**
+     * matching user input to zilla list
+     */
     val filteredItems = remember(query) {
         if (query.isNotEmpty()) {
             zilaList.filter {
@@ -59,56 +64,53 @@ fun SearchScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-
     ) {
         Image(
-            painter = painterResource(timePeriodStyle.drawable),
+            painter = painterResource(R.drawable.background),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
         Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+
+            /**
+             * setting search TextField behavior on focusState
+             */
+
             TextField(
                 value = query,
                 onValueChange = { query = it },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(timePeriodStyle.backgroundColor)
                     .onFocusChanged { focusState ->
                         isFocused = focusState.isFocused
                     },
-
                 placeholder = {
                     if (!isFocused && query.isEmpty()) {
                         Text(
-                            text = "Search...",
-                            color = timePeriodStyle.textColor,
+                            text = LocalContext.current.getString(R.string.search),
+                            color = Color.White,
                             fontFamily = sf_pro
                         )
                     }
                 },
                 colors = TextFieldDefaults.textFieldColors(
-                    textColor = timePeriodStyle.textColor,
-                    cursorColor = timePeriodStyle.textColor,
-                    focusedIndicatorColor = timePeriodStyle.textColor,
-                    unfocusedIndicatorColor = timePeriodStyle.backgroundColor,
-                    placeholderColor = timePeriodStyle.textColor
+                    textColor = Color.White,
+                    cursorColor = Color.White,
+                    focusedIndicatorColor = Color.White,
+                    unfocusedIndicatorColor = Color.White,
+                    placeholderColor = Color.White
                 ),
                 singleLine = true
             )
             Spacer(modifier = Modifier.height(8.dp))
-            LazyColumn(modifier = Modifier
-                .background(timePeriodStyle.backgroundColor)) {
+            LazyColumn {
                 if (query.isNotEmpty()) {
                     items(filteredItems) { item ->
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 8.dp, vertical = 4.dp)
-                                .background(
-                                    color = timePeriodStyle.backgroundColor,
-                                    shape = RoundedCornerShape(12.dp)
-                                )
                                 .clickable {
                                     onItemClicked(item)
                                 }
@@ -117,7 +119,7 @@ fun SearchScreen(
                                 text = item.name.toString(),
                                 modifier = Modifier
                                     .padding(16.dp),
-                                color = timePeriodStyle.textColor,
+                                color = Color.White,
                                 fontFamily = sf_pro
                             )
                         }

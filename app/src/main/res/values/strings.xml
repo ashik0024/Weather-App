@@ -2,4 +2,12 @@
     <string name="app_name">WeatherApp</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="api_key">52b6bc7eef01ef8476e925e0cc91bc58</string>
+    <string name="today">Today</string>
+    <string name="search">Search...</string>
+    <string name="sun_rise">Sun Rise</string>
+    <string name="sun_set">Sun Set</string>
+    <string name="pressure">Pressure</string>
+    <string name="humidity">Humidity</string>
+    <string name="forecast">Forecast</string>
 </resources>
