@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.weatherapp.databinding.ActivityMainBinding
 import com.example.weatherapp.ui.search.ZilaInfo
 import com.example.weatherapp.utils.loaction.LocationViewModel
@@ -28,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        window.statusBarColor = ContextCompat.getColor(this, R.color.statusBar)
         observeLocation()
         checkPermissionsAndFetchLocation()
     }
