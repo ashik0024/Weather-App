@@ -55,6 +55,7 @@ fun SearchScreen(
             emptyList()
         }
     }
+
     Box(
         modifier = Modifier
             .fillMaxSize()

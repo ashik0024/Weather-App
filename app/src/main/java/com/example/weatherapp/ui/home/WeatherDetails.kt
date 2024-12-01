@@ -56,13 +56,13 @@ fun SunRiseSunSet(weather: WeatherResponse) {
         WeatherDetailsCard(
             imageResId = R.drawable.sun_rise,
             name = "Sun Rise",
-            description = Utils.convertUnixToTimeAmPm(weather.sys?.sunrise?.toLong()?:0)
+            description = Utils.convertUnixToTime(weather.sys?.sunrise?.toLong()?:0)
         )
 
         WeatherDetailsCard(
             imageResId = R.drawable.sun_set,
             name = "Sun Set",
-            description = Utils.convertUnixToTimeAmPm(weather.sys?.sunset?.toLong()?:0)
+            description = Utils.convertUnixToTime(weather.sys?.sunset?.toLong()?:0)
         )
     }
 }

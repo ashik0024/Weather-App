@@ -40,7 +40,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        val backgroundDrawable = Utils.getTimePeriodStyle()
 
         arguments?.getParcelable<ZilaInfo>("zilaInfo")?.let { zilaInfo ->
             lat=zilaInfo.coord?.lat?:0.0
@@ -64,7 +63,6 @@ class HomeFragment : Fragment() {
                 long=location.second
 
             }
-            Log.d("LocationRepository", "Received location: Lat=$lat, Lon=$long")
             weatherViewModel.fetchWeatherData(lat?:0.0,long?:0.0,"52b6bc7eef01ef8476e925e0cc91bc58")
             weatherViewModel.fetchForecastData(lat?:0.0,long?:0.0,"52b6bc7eef01ef8476e925e0cc91bc58")
 

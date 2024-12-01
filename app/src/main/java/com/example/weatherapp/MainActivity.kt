@@ -38,10 +38,8 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            Log.d("LocationRepository", "Permission already granted")
             locationViewModel.getLocation()
         } else {
-            Log.d("LocationRepository", "Requesting location permission")
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf( Manifest.permission.ACCESS_FINE_LOCATION),
@@ -55,7 +53,6 @@ class MainActivity : AppCompatActivity() {
                 val location = result.getOrNull()
                 latitude = location?.latitude
                 longitude = location?.longitude
-                Log.d("LocationRepository", "Lat: $latitude, Lon: $longitude")
                 if (latitude != null && longitude != null) {
                     activityViewModel.setLocation(latitude!!, longitude!!)
                 }
@@ -63,7 +60,6 @@ class MainActivity : AppCompatActivity() {
 
             result.onFailure {
                 val exception = result.exceptionOrNull()
-                Log.e("LocationRepository", "Error: ${exception?.message}")
             }
         }
     }
@@ -76,11 +72,11 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 1000) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.d("LocationRepository", "Location permission granted")
+
                 activityViewModel.setPermissionDenied(false)
                 locationViewModel.getLocation()
             } else {
-                Log.d("LocationRepository", "Location permission denied")
+
                 activityViewModel.setPermissionDenied(true)
             }
         }

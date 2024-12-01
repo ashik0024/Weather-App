@@ -37,7 +37,6 @@ class SearchFragment : Fragment() {
         val itemList: Array<ZilaInfo> = gson.fromJson(json, Array<ZilaInfo>::class.java)
         val zilaList = itemList.toList()
 
-        Log.d("itemList", "Parsed List: $zilaList")
         binding?.searchPageCompose?.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         binding?.searchPageCompose?.setContent {
             SearchScreen(zilaList,
