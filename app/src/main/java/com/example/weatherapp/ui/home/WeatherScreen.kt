@@ -28,7 +28,6 @@ import com.example.weatherapp.R
 import com.example.weatherapp.network.Result
 import com.example.weatherapp.network.responseClass.ForecastResponse
 import com.example.weatherapp.network.responseClass.WeatherResponse
-import com.example.weatherapp.network.retrofit.AppContext
 
 @Composable
 fun WeatherScreen(
@@ -96,7 +95,7 @@ fun WeatherScreen(
                                 is Result.Error -> {
                                     val errorMessage = (forecastState as Result.Error).exception.message
                                     LoadingIndicator(false)
-                                    Toast.makeText(AppContext.getContext(),"Error: $errorMessage",Toast.LENGTH_LONG).show()
+                                    Toast.makeText(LocalContext.current,"Error: $errorMessage",Toast.LENGTH_LONG).show()
                                 }
                             }
                         }
@@ -105,7 +104,7 @@ fun WeatherScreen(
                     is Result.Error -> {
                         val errorMessage = (weatherState as Result.Error).exception.message
                         LoadingIndicator(false)
-                        Toast.makeText(AppContext.getContext(),"Error: $errorMessage",Toast.LENGTH_LONG).show()
+                        Toast.makeText(LocalContext.current,"Error: $errorMessage",Toast.LENGTH_LONG).show()
 
                     }
                 }
