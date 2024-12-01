@@ -40,17 +40,19 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val backgroundDrawable = Utils.getTimePeriodStyle()
+//        val backgroundDrawable = Utils.getTimePeriodStyle()
 
         arguments?.getParcelable<ZilaInfo>("zilaInfo")?.let { zilaInfo ->
             lat=zilaInfo.coord?.lat?:0.0
             long=zilaInfo.coord?.lon?:0.0
         }
-
-        binding?.weatherHomePageCompose?.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-        binding?.weatherHomePageCompose?.setContent {
-            WeatherScreen(backgroundDrawable,findNavController())
+        mainActivityViewModel.permissionDenied.observe(viewLifecycleOwner) { permissionDenied ->
+            binding?.weatherHomePageCompose?.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            binding?.weatherHomePageCompose?.setContent {
+                WeatherScreen(findNavController(),permissionDenied)
+            }
         }
+
         observeLocation()
     }
 

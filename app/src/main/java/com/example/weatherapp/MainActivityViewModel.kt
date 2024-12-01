@@ -13,7 +13,14 @@ class MainActivityViewModel @Inject constructor() : ViewModel() {
     private val _locationData = MutableLiveData<Pair<Double, Double>>()
     val locationData: LiveData<Pair<Double, Double>> get() = _locationData
 
+    private val _permissionDenied =  MutableLiveData<Boolean>(false)
+    val permissionDenied:  LiveData<Boolean> = _permissionDenied
+
     fun setLocation(latitude: Double, longitude: Double) {
         _locationData.value = Pair(latitude, longitude)
+    }
+
+    fun setPermissionDenied(denied: Boolean) {
+        _permissionDenied.value = denied
     }
 }

@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -21,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -33,13 +32,13 @@ import com.example.weatherapp.network.retrofit.AppContext
 
 @Composable
 fun WeatherScreen(
-    timePeriodStyle: TimePeriodStyle,
     findNavController: NavController,
+    permissionDenied: Boolean,
     weatherViewModel: WeatherViewModel = hiltViewModel()
     ) {
     val weatherState by weatherViewModel.weatherData.collectAsState()
     val forecastState by weatherViewModel.forecastData.collectAsState()
-
+    val timePeriodStyle= TimePeriodStyle()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -56,55 +55,69 @@ fun WeatherScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            when (weatherState) {
-                is Result.Loading -> {
+            if (permissionDenied) {
+
+                Toast.makeText(LocalContext.current, "Location permission denied. Please enable it to fetch weather data.", Toast.LENGTH_SHORT).show()
+
+            }else{
+                when (weatherState) {
+                    is Result.Loading -> {
 //
-                    LoadingIndicator(true)
-                }
-                is Result.Success -> {
-                    val weather = (weatherState as Result.Success<WeatherResponse>).data
-                    Log.d("getWeatherGroup", weather.weather?.get(0)?.id.toString())
+                        LoadingIndicator(true)
+                        Log.d("WeatherScreen", "1: ")
+                    }
+                    is Result.Success -> {
+                        val weather = (weatherState as Result.Success<WeatherResponse>).data
+                        Log.d("getWeatherGroup", "$weather")
+                        Log.d("WeatherScreen", "2: ")
+                        TopSection(weather,
+                            onSearchClicked = {
+                                findNavController.navigate(R.id.home_to_search)
+                            })
 
-                    TopSection(weather = weather,
-                        onSearchClicked = {
-                            findNavController.navigate(R.id.home_to_search)
-                        })
+                        Column(
+                            modifier = Modifier
+                                .padding(start = 24.dp, end = 24.dp, top = 12.dp, bottom = 4.dp )
+                                .fillMaxWidth()
+                                .fillMaxHeight(),
+                            verticalArrangement = Arrangement.SpaceEvenly,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
 
-                    Column(
-                        modifier = Modifier
-                            .padding(horizontal = 24.dp, vertical = 32.dp)
-                            .fillMaxWidth()
-                            .fillMaxHeight(),
-                        verticalArrangement = Arrangement.SpaceEvenly,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
+                            CurrentWeatherCard(weather,timePeriodStyle)
 
-                        CurrentWeatherCard(weather,timePeriodStyle)
+                            when (forecastState) {
+                                is Result.Loading -> {
+                                    Log.d("WeatherScreen", "3: ")
+                                }
+                                is Result.Success -> {
+                                    Log.d("WeatherScreen", "4: ")
+                                    val forecast = (forecastState as Result.Success<ForecastResponse>).data
+                                    WeatherDetails(weather)
+                                    ForecastWeatherCard(forecast)
 
-                        when (forecastState) {
-                            is Result.Loading -> {
-                            }
-                            is Result.Success -> {
-                                val forecast = (forecastState as Result.Success<ForecastResponse>).data
-                                ForecastWeatherCard(forecast,timePeriodStyle)
-                                LoadingIndicator(false)
-                            }
-                            is Result.Error -> {
-                                val errorMessage = (forecastState as Result.Error).exception.message
-                                LoadingIndicator(false)
-                                Toast.makeText(AppContext.getContext(),"Error: $errorMessage",Toast.LENGTH_LONG).show()
+                                    LoadingIndicator(false)
+                                }
+                                is Result.Error -> {
+                                    Log.d("WeatherScreen", "5: ")
+                                    val errorMessage = (forecastState as Result.Error).exception.message
+                                    LoadingIndicator(false)
+                                    Toast.makeText(AppContext.getContext(),"Error: $errorMessage",Toast.LENGTH_LONG).show()
+                                }
                             }
                         }
+
                     }
+                    is Result.Error -> {
+                        Log.d("WeatherScreen", "6: ")
+                        val errorMessage = (weatherState as Result.Error).exception.message
+                        LoadingIndicator(false)
+                        Toast.makeText(AppContext.getContext(),"Error: $errorMessage",Toast.LENGTH_LONG).show()
 
-                }
-                is Result.Error -> {
-                    val errorMessage = (weatherState as Result.Error).exception.message
-                    LoadingIndicator(false)
-                    Toast.makeText(AppContext.getContext(),"Error: $errorMessage",Toast.LENGTH_LONG).show()
-
+                    }
                 }
             }
+
 
 
         }

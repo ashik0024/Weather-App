@@ -77,10 +77,11 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == 1000) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Log.d("LocationRepository", "Location permission granted")
+                activityViewModel.setPermissionDenied(false)
                 locationViewModel.getLocation()
             } else {
                 Log.d("LocationRepository", "Location permission denied")
-                Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
+                activityViewModel.setPermissionDenied(true)
             }
         }
     }

@@ -31,7 +31,7 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val backgroundDrawable = Utils.getTimePeriodStyle()
+
         val json = Utils.readJsonFromRaw(requireContext(), R.raw.zila_list)
         val gson = Gson()
         val itemList: Array<ZilaInfo> = gson.fromJson(json, Array<ZilaInfo>::class.java)
@@ -40,7 +40,7 @@ class SearchFragment : Fragment() {
         Log.d("itemList", "Parsed List: $zilaList")
         binding?.searchPageCompose?.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         binding?.searchPageCompose?.setContent {
-            SearchScreen(backgroundDrawable,zilaList,
+            SearchScreen(zilaList,
                 onItemClicked = { zilaInfo ->
                     findNavController().navigate(
                         R.id.search_to_home,

@@ -33,10 +33,10 @@ import com.example.weatherapp.ui.home.TimePeriodStyle
 
 @Composable
 fun SearchScreen(
-    timePeriodStyle: TimePeriodStyle, zilaList: List<ZilaInfo>,
+    zilaList: List<ZilaInfo>,
     onItemClicked: (ZilaInfo) -> Unit
 ) {
-
+    val timePeriodStyle= TimePeriodStyle()
     var query by remember { mutableStateOf("") }
     var isFocused by remember { mutableStateOf(false) }
     val filteredItems = remember(query) {
