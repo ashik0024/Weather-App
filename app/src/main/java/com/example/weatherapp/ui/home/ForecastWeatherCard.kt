@@ -23,6 +23,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,7 +37,10 @@ import com.example.weatherapp.utils.Utils
 @Composable
 fun ForecastWeatherCard(forecast: ForecastResponse) {
     val timePeriodStyle = TimePeriodStyle()
-
+    val sf_pro = FontFamily(
+        Font(R.font.sf_pro_regular, FontWeight.Normal),
+        Font(R.font.sf_pro_regular, FontWeight.Bold)
+    )
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -43,7 +48,8 @@ fun ForecastWeatherCard(forecast: ForecastResponse) {
             text = "Forecast",
             fontSize = 20.sp,
             color = timePeriodStyle.textColor,
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp)
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 16.dp),
+            fontFamily = sf_pro
         )
         LazyRow(
             modifier = Modifier
@@ -71,7 +77,8 @@ fun ForecastWeatherCard(forecast: ForecastResponse) {
                     Text(
                         text = Utils.convertUnixToTimeAmPm(forecastItem?.dt?.toLong() ?: 0),
                         fontSize = 14.sp,
-                        color = timePeriodStyle.textColor
+                        color = timePeriodStyle.textColor,
+                        fontFamily = sf_pro
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Image(
@@ -84,7 +91,8 @@ fun ForecastWeatherCard(forecast: ForecastResponse) {
                     Text(
                         text = "$temperature\u00B0C",
                         fontSize = 14.sp,
-                        color = timePeriodStyle.textColor
+                        color = timePeriodStyle.textColor,
+                        fontFamily = sf_pro
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                 }

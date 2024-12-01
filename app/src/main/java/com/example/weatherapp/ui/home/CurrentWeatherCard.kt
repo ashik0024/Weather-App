@@ -19,6 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,7 +31,10 @@ import com.example.weatherapp.utils.Utils
 
 @Composable
 fun CurrentWeatherCard(weather: WeatherResponse, timePeriodStyle: TimePeriodStyle) {
-
+    val sf_pro = FontFamily(
+        Font(R.font.sf_pro_regular, FontWeight.Normal),
+        Font(R.font.sf_pro_regular, FontWeight.Bold)
+    )
     var temperature=Utils.kelvinToCelsius(weather.main?.temp?:0.0)
     Column(
         modifier = Modifier
@@ -38,7 +43,7 @@ fun CurrentWeatherCard(weather: WeatherResponse, timePeriodStyle: TimePeriodStyl
 
     ) {
         Spacer(modifier = Modifier.height(24.dp))
-        Text(text = "Today", fontSize = 20.sp, color = timePeriodStyle.textColor)
+        Text(text = "Today", fontSize = 20.sp, color = timePeriodStyle.textColor, fontFamily = sf_pro)
         Spacer(modifier = Modifier.height(8.dp))
 
         Row (
@@ -60,8 +65,9 @@ fun CurrentWeatherCard(weather: WeatherResponse, timePeriodStyle: TimePeriodStyl
             Text(
                 text = "$temperature\u00B0C",
                 fontSize = 48.sp,
-                fontWeight = FontWeight.Bold,
-                color = timePeriodStyle.textColor
+
+                color = timePeriodStyle.textColor ,
+                fontFamily = sf_pro
             )
         }
 
@@ -69,13 +75,15 @@ fun CurrentWeatherCard(weather: WeatherResponse, timePeriodStyle: TimePeriodStyl
         Text(
             text = weather.weather?.joinToString(", ") { it?.main ?: "Unknown" }.toString(),
             fontSize = 20.sp,
-            color = timePeriodStyle.textColor
+            color = timePeriodStyle.textColor,
+            fontFamily = sf_pro
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = Utils.convertUnixToDate(weather.dt?.toLong()?:0),
             fontSize = 14.sp,
-            color = timePeriodStyle.textColor
+            color = timePeriodStyle.textColor,
+            fontFamily = sf_pro
         )
 
     }

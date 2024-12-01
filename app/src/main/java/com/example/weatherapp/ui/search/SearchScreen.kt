@@ -27,7 +27,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.weatherapp.R
 import com.example.weatherapp.ui.home.TimePeriodStyle
 
 
@@ -36,6 +40,10 @@ fun SearchScreen(
     zilaList: List<ZilaInfo>,
     onItemClicked: (ZilaInfo) -> Unit
 ) {
+    val sf_pro = FontFamily(
+        Font(R.font.sf_pro_regular, FontWeight.Normal),
+        Font(R.font.sf_pro_regular, FontWeight.Bold)
+    )
     val timePeriodStyle= TimePeriodStyle()
     var query by remember { mutableStateOf("") }
     var isFocused by remember { mutableStateOf(false) }
@@ -73,7 +81,8 @@ fun SearchScreen(
                     if (!isFocused && query.isEmpty()) {
                         Text(
                             text = "Search...",
-                            color = timePeriodStyle.textColor
+                            color = timePeriodStyle.textColor,
+                            fontFamily = sf_pro
                         )
                     }
                 },
@@ -108,7 +117,7 @@ fun SearchScreen(
                                 modifier = Modifier
                                     .padding(16.dp),
                                 color = timePeriodStyle.textColor,
-                                style = MaterialTheme.typography.body1
+                                fontFamily = sf_pro
                             )
                         }
                     }

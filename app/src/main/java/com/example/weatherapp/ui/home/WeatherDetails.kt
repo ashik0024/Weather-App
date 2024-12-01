@@ -97,7 +97,10 @@ fun WeatherDetailsCard(
     name: String,
     description: String
 ) {
-
+    val sf_pro = FontFamily(
+        Font(R.font.sf_pro_regular, FontWeight.Normal),
+        Font(R.font.sf_pro_regular, FontWeight.Bold)
+    )
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start,
@@ -132,14 +135,14 @@ fun WeatherDetailsCard(
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
-
+                fontFamily = sf_pro
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = description,
                 fontSize = 12.sp,
                 color = Color.White,
-
+                fontFamily = sf_pro
             )
         }
     }

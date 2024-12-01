@@ -17,13 +17,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.weatherapp.R
 import com.example.weatherapp.network.responseClass.WeatherResponse
 
 @Composable
 fun TopSection(weather: WeatherResponse,onSearchClicked: () -> Unit) {
-
+    val sf_pro = FontFamily(
+        Font(R.font.sf_pro_regular, FontWeight.Normal),
+        Font(R.font.sf_pro_regular, FontWeight.Bold)
+    )
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -55,7 +61,8 @@ fun TopSection(weather: WeatherResponse,onSearchClicked: () -> Unit) {
                     text = weather.name.toString()+", "+weather.sys?.country,
                     style = MaterialTheme.typography.body1,
                     modifier = Modifier.align(Alignment.CenterVertically),
-                    color =  Color.White
+                    color =  Color.White,
+                    fontFamily = sf_pro
                 )
             }
 
